@@ -2,8 +2,20 @@ with orders as  (
     select * from {{ ref ('stg_jaffle_shop__orders' )}}
 ),
 
-payments as (
+payments_orig as (
     select * from {{ ref ('stg_stripe__payment') }}
+),
+
+payments as (
+    select
+        payment_id,
+        order_id,
+        payment_method,
+        status as payment_status,
+        amount as payment_amount,
+        created_at
+        -- _batched_at
+    from payments_orig
 ),
 
 order_payments as (
